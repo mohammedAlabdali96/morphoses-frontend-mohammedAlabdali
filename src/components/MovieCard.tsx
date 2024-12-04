@@ -1,6 +1,12 @@
 import React from "react";
+import { Movie } from '../types/api';
 
-const MovieCard: React.FC<any> = ({ movie, genres }) => {
+interface MovieCardProps {
+  movie: Movie;
+  genres: { [key: number]: string };
+}
+
+const MovieCard: React.FC<MovieCardProps> = ({ movie, genres }) => {
   return (
     <div className="movie-card border p-4 rounded-md shadow-md">
       <img
@@ -13,7 +19,7 @@ const MovieCard: React.FC<any> = ({ movie, genres }) => {
       </h3>
       <p className="text-sm text-gray-600">Rating: {movie.vote_average} / 10</p>
       <p className="text-sm text-gray-500">
-        Genres: {movie.genre_ids.map((id: any) => genres[id]).join(", ")}
+        Genres: {movie.genre_ids.map((id) => genres[id]).join(", ")}
       </p>
       <p className="text-sm mt-2 line-clamp-3">{movie.overview}</p>
     </div>
