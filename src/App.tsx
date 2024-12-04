@@ -1,26 +1,29 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchMovies } from './store/moviesSlice';
+import { RootState, AppDispatch } from './store';
 
-function App() {
+const App: React.FC = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  const { movies, genres, status } = useSelector((state: RootState) => state.movies);
+
+  useEffect(() => {
+    if (status === 'idle') {
+      dispatch(fetchMovies());
+    }
+  }, [dispatch, status]);
+
+  useEffect(() => {
+    console.log('Movies:', movies);
+    console.log('Genres:', genres);
+  }, [movies, genres]);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1 className="text-2xl font-bold text-center my-4">Now Playing Movies</h1>
+      <p>Status: {status}</p>
     </div>
   );
-}
+};
 
 export default App;
