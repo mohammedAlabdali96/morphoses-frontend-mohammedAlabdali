@@ -1,17 +1,17 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { fetchNowPlaying, fetchGenres } from '../services/api';
-import { Movie } from '../types/api';
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import { fetchNowPlaying, fetchGenres } from "../services/api";
+import { Movie } from "../types/api";
 
 interface MoviesState {
   movies: Movie[];
   genres: { [key: number]: string }; // Map of genre ID to name
-  status: 'idle' | 'loading' | 'succeeded' | 'failed';
+  status: "idle" | "loading" | "succeeded" | "failed";
 }
 
 const initialState: MoviesState = {
   movies: [],
   genres: {},
-  status: 'idle',
+  status: "idle",
 };
 
 interface FetchMoviesResult {
@@ -20,7 +20,7 @@ interface FetchMoviesResult {
 }
 
 export const fetchMovies = createAsyncThunk<FetchMoviesResult>(
-  'movies/fetchMovies',
+  "movies/fetchMovies",
   async () => {
     const [genresResponse, nowPlayingResponse] = await Promise.all([
       fetchGenres(),
@@ -40,27 +40,27 @@ export const fetchMovies = createAsyncThunk<FetchMoviesResult>(
 );
 
 const moviesSlice = createSlice({
-  name: 'movies',
+  name: "movies",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(fetchMovies.pending, (state) => {
-        console.log('Fetching movies: pending');
-        state.status = 'loading';
+        console.log("Fetching movies: pending");
+        state.status = "loading";
       })
       .addCase(
         fetchMovies.fulfilled,
         (state, action: PayloadAction<FetchMoviesResult>) => {
-          console.log('Fetching movies: succeeded', action.payload);
-          state.status = 'succeeded';
+          console.log("Fetching movies: succeeded", action.payload);
+          state.status = "succeeded";
           state.movies = action.payload.movies;
           state.genres = action.payload.genres;
         }
       )
       .addCase(fetchMovies.rejected, (state) => {
-        console.log('Fetching movies: failed');
-        state.status = 'failed';
+        console.log("Fetching movies: failed");
+        state.status = "failed";
       });
   },
 });
