@@ -6,12 +6,14 @@ interface MoviesState {
   movies: Movie[];
   genres: { [key: number]: string }; // Map of genre ID to name
   status: "idle" | "loading" | "succeeded" | "failed";
+  loading: boolean;
 }
 
 const initialState: MoviesState = {
   movies: [],
   genres: {},
   status: "idle",
+  loading: false,
 };
 
 interface FetchMoviesResult {
@@ -19,22 +21,24 @@ interface FetchMoviesResult {
   genres: { [key: number]: string };
 }
 
-export const fetchMovies = createAsyncThunk<FetchMoviesResult>(
+export const fetchMovies = createAsyncThunk(
   "movies/fetchMovies",
-  async () => {
-    const [genresResponse, nowPlayingResponse] = await Promise.all([
-      fetchGenres(),
-      fetchNowPlaying(1),
-    ]);
+  async (page: number, { getState }) => {
+    const { movies }: any = getState();
+    const genresResponse = movies.genres ? null : await fetchGenres();
+    console.log("fetch");
+    const nowPlayingResponse = await fetchNowPlaying(page);
 
-    const genreMap: { [key: number]: string } = {};
-    genresResponse.genres.forEach((genre) => {
-      genreMap[genre.id] = genre.name;
-    });
+    const genreMap: { [key: number]: string } = genresResponse
+      ? genresResponse.genres.reduce((map, genre) => {
+          map[genre.id] = genre.name;
+          return map;
+        }, {} as { [key: number]: string })
+      : movies.genres;
 
     return {
       movies: nowPlayingResponse.results,
-      genres: genreMap,
+      genres: genresResponse ? genreMap : movies.genres,
     };
   }
 );
@@ -42,27 +46,29 @@ export const fetchMovies = createAsyncThunk<FetchMoviesResult>(
 const moviesSlice = createSlice({
   name: "movies",
   initialState,
-  reducers: {},
+  reducers: {
+    resetState: () => initialState,
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchMovies.pending, (state) => {
-        console.log("Fetching movies: pending");
-        state.status = "loading";
-      })
-      .addCase(
-        fetchMovies.fulfilled,
-        (state, action: PayloadAction<FetchMoviesResult>) => {
-          console.log("Fetching movies: succeeded", action.payload);
-          state.status = "succeeded";
-          state.movies = action.payload.movies;
-          state.genres = action.payload.genres;
+        if (!state.loading) {
+          state.loading = true;
+          state.status = "loading";
         }
-      )
+      })
+      .addCase(fetchMovies.fulfilled, (state, action) => {
+        state.loading = false;
+        state.status = "succeeded";
+        state.movies = [...state.movies, ...action.payload.movies];
+        state.genres = action.payload.genres;
+      })
       .addCase(fetchMovies.rejected, (state) => {
-        console.log("Fetching movies: failed");
+        state.loading = false;
         state.status = "failed";
       });
   },
 });
 
+export const { resetState } = moviesSlice.actions;
 export default moviesSlice.reducer;
