@@ -1,17 +1,16 @@
-import React from 'react';
-import NowPlaying from './pages/NowPlaying';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import MovieList from "./pages/NowPlaying";
+// import Search from "./pages/Search";
 
-const App: React.FC = () => {
+function App() {
   return (
-    <div className="App">
-      <header className="bg-blue-600 text-white text-center py-4">
-        <h1 className="text-2xl font-bold">Now Playing Movies</h1>
-      </header>
-      <main>
-        <NowPlaying />
-      </main>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<MovieList />} />
+        {/* <Route path="/search" element={<Search />} /> */}
+      </Routes>
+    </Router>
   );
-};
+}
 
 export default App;

@@ -1,68 +1,88 @@
-import React, { useState, useEffect, useCallback } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { fetchMovies, resetState } from "../store/moviesSlice";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  fetchMovies,
+  fetchSearchResultsThunk,
+  fetchGenresThunk,
+  incrementPage,
+  setFetching,
+} from "../store/moviesSlice";
 import { RootState, AppDispatch } from "../store";
 import MovieCard from "../components/MovieCard";
+import SearchBar from "../components/SearchBar";
 import useInfiniteScroll from "../hooks/useInfiniteScroll";
+import Loading from "../components/Loading";
+import Error from "../components/Error";
+import NoItemsFound from "../components/NoItemsFound";
 
-const NowPlaying: React.FC = () => {
+const MovieList: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { movies, genres, status, loading } = useSelector(
-    (state: RootState) => state.movies
-  );
-  const [page, setPage] = useState(1);
+  const {
+    movies,
+    genres,
+    page,
+    searchQuery,
+    isFetching,
+    loading,
+    error,
+    hasMore,
+  } = useSelector((state: RootState) => state.movies);
 
-  const handleFetchMore = useCallback(() => {
-    setPage((prevPage) => prevPage + 1);
-  }, []);
-
-  const [isFetching, setIsFetching] = useInfiniteScroll(handleFetchMore);
-
-  // Handle initial load
+  // Fetch genres once on component load
   useEffect(() => {
-    if (status === "idle" && !loading) {
-      dispatch(fetchMovies(page))
-        .then(() => {
-          setPage((prevPage) => prevPage + 1);
-        })
-        .catch(() => {
-          console.error("Failed to fetch initial movies");
-        });
+    if (hasMore) {
+      if (Object.keys(genres).length === 0) {
+        dispatch(fetchGenresThunk());
+      }
     }
-  }, [dispatch, status, page]);
+  }, [dispatch, genres]);
 
+  // Fetch movies or search results on query/page changes
   useEffect(() => {
-    if (isFetching && !loading) {
-      dispatch(fetchMovies(page))
-        .then(() => {
-          setIsFetching(false);
-        })
-        .catch(() => {
-          setIsFetching(false);
-        });
+    if (hasMore) {
+      if (searchQuery.trim()) {
+        if (!isFetching && movies.length) return;
+        dispatch(fetchSearchResultsThunk({ query: searchQuery, page })).finally(
+          () => dispatch(setFetching(false))
+        );
+      } else {
+        if (!isFetching && movies.length) return;
+        dispatch(fetchMovies(page)).finally(() => dispatch(setFetching(false)));
+      }
     }
-  }, [dispatch, page, isFetching]);
+  }, [dispatch, isFetching, searchQuery, page]);
 
-  if (status === "loading" && page === 1) {
-    return <p className="text-center mt-8">Loading movies...</p>;
-  }
-
-  if (status === "failed") {
-    return (
-      <p className="text-center mt-8 text-red-600">
-        Failed to load movies. Please try again.
-      </p>
-    );
-  }
+  useInfiniteScroll({
+    isFetching,
+    loading,
+    onScrollEnd: () => {
+      dispatch(setFetching(true));
+      dispatch(incrementPage());
+    },
+  });
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
-      {movies.map((movie) => (
-        <MovieCard key={movie.id} movie={movie} genres={genres} />
-      ))}
-      {loading && <p className="text-center mt-4">Loading more movies...</p>}
+    <div>
+      {/* Search Bar */}
+      <SearchBar />
+
+      {/* Loading */}
+      {loading && <Loading />}
+
+      {/* Error */}
+      {error && <Error message={error} />}
+
+      {/* No Items Found */}
+      {!loading && movies.length === 0 && searchQuery && <NoItemsFound />}
+
+      {/* Movie Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
+        {movies.map((movie) => (
+          <MovieCard key={movie.id} movie={movie} genres={genres} />
+        ))}
+      </div>
     </div>
   );
 };
 
-export default NowPlaying;
+export default MovieList;

@@ -19,3 +19,15 @@ export const fetchGenres = async (): Promise<GenreResponse> => {
   );
   return response.data;
 };
+
+export const fetchSearchResults = async (
+  query: string,
+  page: number
+): Promise<any> => {
+  const response = await axios.get(
+    `${BASE_URL}/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(
+      query
+    )}&page=${page}`
+  );
+  return response.data;
+};
