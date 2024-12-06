@@ -2,6 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 import { fetchMovies } from "./thunks/fetchMovies";
 import { fetchSearchResultsThunk } from "./thunks/fetchSearchResults";
 import { fetchGenresThunk } from "./thunks/fetchGenres";
+import { fetchMoviePreviewDetails } from "./thunks/fetchMoviePreviewDetails";
+
 import { initialState } from "./initialState";
 
 const movieSlice = createSlice({
@@ -82,6 +84,24 @@ const movieSlice = createSlice({
 
       .addCase(fetchGenresThunk.fulfilled, (state, action) => {
         state.genres = action.payload;
+      })
+      // Fetch movie preview details
+      .addCase(fetchMoviePreviewDetails.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchMoviePreviewDetails.fulfilled, (state, action) => {
+        const { movieId, videos, reviews, similarMovies } = action.payload;
+        const movie = state.movies.find((m) => m.id === movieId);
+
+        if (movie) {
+          movie.preview = { videos, reviews, similarMovies };
+        }
+        state.loading = false;
+      })
+      .addCase(fetchMoviePreviewDetails.rejected, (state) => {
+        state.loading = false;
+        state.error = "Failed to fetch movie details.";
       });
   },
 });

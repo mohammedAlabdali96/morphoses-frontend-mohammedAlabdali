@@ -1,11 +1,29 @@
 export interface Movie {
   id: number;
   title: string;
-  release_date: string;
-  genre_ids: number[];
-  poster_path: string;
-  vote_average: number;
   overview: string;
+  poster_path: string;
+  genre_ids: number[];
+  release_date: string;
+  vote_average: number;
+  preview: {
+    videos: Video[];
+    reviews: Review[];
+    similarMovies: Movie[];
+  };
+}
+
+export interface Video {
+  id: string;
+  key: string;
+  name: string;
+  site: string;
+  type: string;
+}
+
+export interface Review {
+  author: string;
+  content: string;
 }
 
 export interface Genre {

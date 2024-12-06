@@ -31,3 +31,24 @@ export const fetchSearchResults = async (
   );
   return response.data;
 };
+
+export const fetchMovieVideos = async (movieId: number) => {
+  const response = await axios.get(
+    `${BASE_URL}/movie/${movieId}/videos?api_key=${API_KEY}`
+  );
+  return response.data;
+};
+
+export const fetchMovieReviews = async (movieId: number) => {
+  const response = await axios.get(
+    `${BASE_URL}/movie/${movieId}/reviews?api_key=${API_KEY}`
+  );
+  return response.data;
+};
+
+export const fetchSimilarMovies = async (movieId: number) => {
+  const response = await axios.get(
+    `${BASE_URL}/movie/${movieId}/similar?api_key=${API_KEY}`
+  );
+  return response.data;
+};

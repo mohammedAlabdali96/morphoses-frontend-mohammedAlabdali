@@ -1,5 +1,6 @@
 import React from "react";
-import { Movie } from '../types/api';
+import { useNavigate } from "react-router-dom";
+import { Movie } from "../types/api";
 
 interface MovieCardProps {
   movie: Movie;
@@ -7,8 +8,17 @@ interface MovieCardProps {
 }
 
 const MovieCard: React.FC<MovieCardProps> = ({ movie, genres }) => {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate(`/movies/${movie.id}`);
+  };
+
   return (
-    <div className="movie-card border p-4 rounded-md shadow-md">
+    <div
+      className="movie-card border p-4 rounded-md shadow-md"
+      onClick={handleClick}
+    >
       <img
         src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
         alt={movie.title}
