@@ -1,54 +1,44 @@
 import axios from "axios";
-import { NowPlayingResponse, GenreResponse } from "../types/api";
+import {
+  NowPlayingResponse,
+  GenreResponse,
+  MovieDetailsResponse,
+} from "../types/api";
 
 const API_KEY = "eb46c700349d0bc443b533a821cec5db";
 const BASE_URL = "https://api.themoviedb.org/3";
 
-export const fetchNowPlaying = async (
-  page: number
-): Promise<NowPlayingResponse> => {
-  const response = await axios.get(
-    `${BASE_URL}/movie/now_playing?api_key=${API_KEY}&page=${page}`
-  );
+const fetchData = async (
+  endpoint: string,
+  params: Record<string, any> = {}
+) => {
+  const response = await axios.get(`${BASE_URL}${endpoint}`, {
+    params: { api_key: API_KEY, ...params },
+  });
   return response.data;
 };
 
+export const fetchNowPlaying = async (
+  page: number
+): Promise<NowPlayingResponse> => {
+  return fetchData("/movie/now_playing", { page });
+};
+
 export const fetchGenres = async (): Promise<GenreResponse> => {
-  const response = await axios.get(
-    `${BASE_URL}/genre/movie/list?api_key=${API_KEY}`
-  );
-  return response.data;
+  return fetchData("/genre/movie/list");
 };
 
 export const fetchSearchResults = async (
   query: string,
   page: number
 ): Promise<NowPlayingResponse> => {
-  const response = await axios.get(
-    `${BASE_URL}/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(
-      query
-    )}&page=${page}`
-  );
-  return response.data;
+  return fetchData("/search/movie", { query: encodeURIComponent(query), page });
 };
 
-export const fetchMovieVideos = async (movieId: number) => {
-  const response = await axios.get(
-    `${BASE_URL}/movie/${movieId}/videos?api_key=${API_KEY}`
-  );
-  return response.data;
-};
-
-export const fetchMovieReviews = async (movieId: number) => {
-  const response = await axios.get(
-    `${BASE_URL}/movie/${movieId}/reviews?api_key=${API_KEY}`
-  );
-  return response.data;
-};
-
-export const fetchSimilarMovies = async (movieId: number) => {
-  const response = await axios.get(
-    `${BASE_URL}/movie/${movieId}/similar?api_key=${API_KEY}`
-  );
-  return response.data;
+export const fetchMovieById = async (
+  movieId: number
+): Promise<MovieDetailsResponse> => {
+  return fetchData(`/movie/${movieId}`, {
+    append_to_response: "videos,reviews,similar",
+  });
 };

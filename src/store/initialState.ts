@@ -1,7 +1,8 @@
-import { MovieState } from "./types"
+import { MovieState } from "./types";
 
 export const initialState: MovieState = {
   movies: [],
+  selectedMovie: null,
   genres: {},
   page: 1,
   searchQuery: "",

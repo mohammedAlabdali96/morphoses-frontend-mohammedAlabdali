@@ -2,6 +2,7 @@ import { Movie } from "../types/api";
 
 export interface MovieState {
   movies: Movie[];
+  selectedMovie: Movie | null;
   genres: { [key: number]: string };
   page: number;
   searchQuery: string;

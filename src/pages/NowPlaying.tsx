@@ -1,9 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  incrementPage,
-  setFetching,
-} from "../store/moviesSlice";
+import { incrementPage, setFetching } from "../store/moviesSlice";
 import { fetchMovies } from "../store/thunks/fetchMovies";
 import { fetchSearchResultsThunk } from "../store/thunks/fetchSearchResults";
 import { fetchGenresThunk } from "../store/thunks/fetchGenres";
@@ -27,7 +24,6 @@ const MovieList: React.FC = () => {
     error,
     hasMore,
   } = useSelector((state: RootState) => state.movies);
-
 
   useEffect(() => {
     if (Object.keys(genres).length === 0) {
@@ -56,20 +52,21 @@ const MovieList: React.FC = () => {
   });
 
   return (
-    <div>
-      <SearchBar />
+    <div className="bg-gray-100 min-h-screen">
+      <header className="sticky top-0 bg-gray-800 z-10 p-4">
+        <SearchBar />
+      </header>
 
-      {loading && <Loading />}
-
-      {error && <Error message={error} />}
-
-      {!loading && movies.length === 0 && searchQuery && <NoItemsFound />}
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
-        {movies.map((movie, index) => (
-          <MovieCard key={index} movie={movie} genres={genres} />
-        ))}
-      </div>
+      <main className="p-6">
+        {loading && <Loading />}
+        {error && <Error message={error} />}
+        {!loading && movies.length === 0 && searchQuery && <NoItemsFound />}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {movies.map((movie, index) => (
+            <MovieCard key={index} movie={movie} genres={genres} />
+          ))}
+        </div>
+      </main>
     </div>
   );
 };

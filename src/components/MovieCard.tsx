@@ -16,7 +16,7 @@ const MovieCard: React.FC<MovieCardProps> = ({ movie, genres }) => {
 
   return (
     <div
-      className="movie-card border p-4 rounded-md shadow-md"
+      className="movie-card cursor-pointer border border-gray-300 p-4 rounded-md shadow-sm hover:shadow-lg hover:scale-105 hover:bg-gray-100 transition-transform duration-300"
       onClick={handleClick}
     >
       <img
