@@ -29,10 +29,11 @@ const MovieList: React.FC = () => {
     if (Object.keys(genres).length === 0) {
       dispatch(fetchGenresThunk());
     }
-    // check if it last page
+
     if (!hasMore) return;
 
     if (!isFetching && movies.length) return;
+
     if (searchQuery.trim()) {
       dispatch(fetchSearchResultsThunk({ query: searchQuery, page })).finally(
         () => dispatch(setFetching(false))
@@ -53,11 +54,15 @@ const MovieList: React.FC = () => {
 
   return (
     <div className="bg-gray-100 min-h-screen">
-      <header className="sticky top-0 bg-gray-800 z-10 p-4">
-        <SearchBar />
-      </header>
+      {/* Static Search Bar */}
+      <div className="sticky top-0 z-20 bg-gray-800 shadow-md">
+        <div className="container mx-auto p-4">
+          <SearchBar />
+        </div>
+      </div>
 
-      <main className="p-6">
+      {/* Main Content */}
+      <main className="container mx-auto p-6">
         {loading && <Loading />}
         {error && <Error message={error} />}
         {!loading && movies.length === 0 && searchQuery && <NoItemsFound />}
