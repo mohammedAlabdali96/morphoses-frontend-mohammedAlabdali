@@ -1,7 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import MovieList from "./pages/NowPlaying";
-import MovieDetails from "./pages/MovieDetails";
 import Header from "./components/Header";
 
 const App: React.FC = () => {
@@ -12,7 +11,6 @@ const App: React.FC = () => {
         <main className="flex-grow">
           <Routes>
             <Route path="/" element={<MovieList />} />
-            <Route path="/movies/:id" element={<MovieDetails />} />
           </Routes>
         </main>
       </div>
