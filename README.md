@@ -1,46 +1,49 @@
-# Getting Started with Create React App
+# Movie App Assignment
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project is a movie application built as part of an assignment. Below are some important notes and areas for potential improvement.
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## 🚩 Notes for the Reviewer
 
-### `npm start`
+### 1. **Skipping Unit Tests**
+I have chosen to skip writing unit tests for this assignment. While I have a basic understanding of writing simple unit tests, I am not highly experienced in this area yet. Testing is something I am actively working to improve on, and it’s a skill I’m keen to develop further.  
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+If the lack of unit tests is a concern, I would greatly appreciate feedback on how to improve my approach.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+---
 
-### `npm test`
+### 2. **Potential Improvements**
+During the development process, I identified a few enhancements that could improve the app's functionality and user experience. However, I did not implement these changes as I wasn’t sure if they aligned with the requirements:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- **Adding Query Search and Page to the URL**  
+  - This feature would allow users to copy and share the app's URL, and others would see the same search results or page when they open the link.
+  - **Interactive Search Conflict**: Since the assignment requires interactive search (updating results as the user types), dynamically updating the URL could lead to frequent URL changes and a less optimal experience.
+  - **Suggested Solution**:  
+    If this feature is required, I suggest adding a **Search** button instead of automatic updates. Users could type their query, click "Search," and the app would update the URL and load the results. Additionally, a dropdown or suggestions list below the search bar could improve the experience.
 
-### `npm run build`
+---
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### 3. **Final Thoughts**
+I have done my best to meet the requirements of the assignment with the skills and time available. While there are areas for improvement, I hope the submitted work showcases my problem-solving approach and dedication.  
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Regardless of the outcome, I’d greatly appreciate written feedback on the assignment. If I don’t meet your expectations, there’s no need for a follow-up call from my side. Constructive feedback alone would be highly valuable for me to improve.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+---
 
-### `npm run eject`
+## 🛠️ Tech Stack
+- React
+- Redux
+- TypeScript
+- Tailwind CSS
+- Jest (for testing)
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+---
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## 🚀 Getting Started
+1. Clone the repository:
+   ```bash
+   git clone <repository-url>
+   cd <project-folder>
+   npm start
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
