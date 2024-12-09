@@ -38,7 +38,14 @@ export const fetchSearchResults = async (
 export const fetchMovieById = async (
   movieId: number
 ): Promise<MovieDetailsResponse> => {
-  return fetchData(`/movie/${movieId}`, {
+  const data = await fetchData(`/movie/${movieId}`, {
     append_to_response: "videos,reviews,similar",
   });
+
+  if (data.similar?.results) {
+    data.similar.results = data.similar.results.slice(0, 2);
+  }
+
+  return data;
 };
+
