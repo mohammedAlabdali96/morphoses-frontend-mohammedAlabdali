@@ -49,8 +49,12 @@ const movieSlice = createSlice({
         state.isFetching = false;
         state.totalResults = action.payload.totalResults;
         state.totalPages = action.payload.totalPages;
-        state.movies = [...state.movies, ...action.payload.movies];
-
+        const combinedMovies = [...state.movies, ...action.payload.movies];
+        const uniqueMovies = Array.from(
+          new Map(combinedMovies.map((movie) => [movie.id, movie])).values()
+        );
+  
+        state.movies = uniqueMovies;
         if (state.page >= action.payload.totalPages) {
           state.hasMore = false;
         }
@@ -70,8 +74,12 @@ const movieSlice = createSlice({
         state.isFetching = false;
         state.totalResults = action.payload.totalResults;
         state.totalPages = action.payload.totalPages;
-        state.movies = [...state.movies, ...action.payload.movies];
-
+        const combinedMovies = [...state.movies, ...action.payload.movies];
+        const uniqueMovies = Array.from(
+          new Map(combinedMovies.map((movie) => [movie.id, movie])).values()
+        );
+  
+        state.movies = uniqueMovies;
         if (state.page >= action.payload.totalPages) {
           state.hasMore = false;
         }

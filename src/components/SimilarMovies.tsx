@@ -25,35 +25,27 @@ const SimilarMovies: React.FC<SimilarMoviesProps> = ({ similarMovies }) => {
 
   return (
     <section className="mb-8 bg-gray-50 p-6 rounded-md shadow-sm border border-gray-200">
-      <div className="similar-movies mt-4">
-        <h2 className="text-2xl font-semibold mb-4 border-b-4 border-gray-200">
-          Similar Movies
-        </h2>
-        <div className="relative">
-          {/* Scroll Indicator */}
-          <div className="absolute top-0 bottom-0 left-0 w-8 bg-gradient-to-r from-white via-white to-transparent pointer-events-none"></div>
-          <div className="absolute top-0 bottom-0 right-0 w-8 bg-gradient-to-l from-white via-white to-transparent pointer-events-none"></div>
-
-          {/* Scrollable Container */}
-          <div className="flex overflow-x-auto space-x-4 scrollbar-hide">
-            {similarMovies.map((movie) => (
-              <div
-                key={movie.id}
-                className="similar-movie-card cursor-pointer border border-gray-300 p-2 rounded-md shadow-sm hover:shadow-lg transition-transform duration-300 hover:scale-105 hover:bg-gray-100"
-                onClick={() => navigate(`/movies/${movie.id}`)}
-                style={{ minWidth: "150px" }}
-              >
-                <img
-                  src={`https://image.tmdb.org/t/p/w200${movie.poster_path}`}
-                  alt={movie.title}
-                  className="w-full h-auto rounded-md"
-                />
-                <p className="text-sm text-center mt-2 font-medium">
-                  {movie.title}
-                </p>
-              </div>
-            ))}
-          </div>
+      <h2 className="text-2xl font-semibold mb-4 border-b-4 border-gray-200">
+        Similar Movies
+      </h2>
+      <div className="relative">
+        {/* Scrollable Container */}
+        <div className="flex overflow-x-auto space-x-4 scrollbar-hide justify-center items-start">
+          {similarMovies.map((movie) => (
+            <div
+              key={movie.id}
+              className="similar-movie-card cursor-pointer border border-gray-300 p-4 rounded-md shadow-sm hover:shadow-lg transition-transform duration-300 hover:scale-105 hover:bg-gray-100 flex-shrink-0"
+              onClick={() => navigate(`/movies/${movie.id}`)}
+              style={{ minWidth: "150px", textAlign: "center" }}
+            >
+              <img
+                src={`https://image.tmdb.org/t/p/w200${movie.poster_path}`}
+                alt={movie.title}
+                className="w-full h-40 object-cover rounded-md"
+              />
+              <p className="text-sm mt-2 font-medium">{movie.title}</p>
+            </div>
+          ))}
         </div>
       </div>
     </section>

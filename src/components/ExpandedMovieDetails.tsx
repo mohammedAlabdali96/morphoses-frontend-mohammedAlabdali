@@ -28,7 +28,7 @@ const ExpandedMovieDetails: React.FC<ExpandedMovieDetailsProps> = ({
       </button>
 
       {/* Scrollable Content */}
-      <div className="overflow-y-auto max-h-[400px] p-4">
+      <div className="overflow-y-auto max-h-[500px] p-4">
         {loadingDetails ? (
           <Loading />
         ) : expandedMovieDetails ? (
